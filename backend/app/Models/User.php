@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Patient;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+
     protected $fillable = [
         'name',
         'email',
@@ -25,21 +22,12 @@ class User extends Authenticatable implements JWTSubject
         'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,6 +35,8 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
+    // JWT
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -59,7 +49,13 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    // Relations
+    public function patient()
+    {
+        return $this->hasOne(Patient::class);
+    }
 
+    // Helpers rôles
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -70,8 +66,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->role === 'doctor';
     }
 
-    public function isSecretary(): bool
+    public function isPharmacist(): bool
     {
-        return $this->role === 'secretary';
+        return $this->role === 'pharmacist';
     }
 }

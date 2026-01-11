@@ -10,7 +10,7 @@
  */
 
 return [
-
+    'user' => App\Models\User::class,
     /*
     |--------------------------------------------------------------------------
     | JWT Authentication Secret
@@ -262,7 +262,10 @@ return [
     */
 
     'providers' => [
-
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
         /*
         |--------------------------------------------------------------------------
         | JWT Provider
